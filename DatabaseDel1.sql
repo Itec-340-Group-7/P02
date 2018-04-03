@@ -46,7 +46,13 @@ create table Payment (
   , Payment number(7,2)
   );
 
+--Done by Steven
+--INSERT INTO Trip VALUES();
 
---insert into 
---adfa
---testsetasfd
+--INSERT INTO Condo_Reservation VALUES();
+
+--INSERT INTO SkiClub VALUES();
+
+--INSERT INTO Condo_Assign VALUES();
+
+--INSERT INTO Payment VALUES();
