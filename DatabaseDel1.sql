@@ -1,5 +1,8 @@
 --Austin Crockett 
---Week 3 Homework
+--Steven Horton
+-- Colin Ryan
+--ITEC 340
+
 SET Echo ON;
 set serveroutput ON;
 drop table Enroll;
