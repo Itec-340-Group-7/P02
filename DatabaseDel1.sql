@@ -14,23 +14,23 @@ drop table Condo_Assign;
 drop table Payment;
 
 create table Trip (
-    TID number(1) NOT NULL
+    TID number(3) NOT NULL
   , Resort varchar2(30) 
   , Sun_Date Date
   , City varchar2(30)
   , State varchar2(2)
-  , Constraint PK_Trip Primary Key(TID)
+  --, Constraint PK_Trip Primary Key(TID)
   );
 
 create table Condo_Reservation (
     RID varchar2(10) NOT NULL
-  , TID varchar2(30) NOT NULL
+  , TID number(3) NOT NULL
   , Name varchar2(30) 
   , Unit_NO number(7) 
   , Bldg number(2)
   , Gender char(1)
   , Constraint PK_Condo_Res Primary Key(RID, TID)
- -- , Constraint FK_Condo_Res Foreign Key(TID) REFERENCES Trip(TID)
+  --, Constraint FK_Condo_Res Foreign Key(TID) REFERENCES Trip(TID)
   );
 
 create table SkiClub (
@@ -43,18 +43,19 @@ create table SkiClub (
   );
 
 create table Condo_Assign (
-    MID number(5) 
-  , RID varchar2(10)
-  , Constraint PK_Condo_Assign Primary Key (MID, RID);
+    MID number(5) NOT NULL
+  , RID varchar2(10) NOT NULL
+  , Constraint PK_Condo_Assign Primary Key (MID, RID)
  -- , Constraint FK_Condo_MID Foreign Key (MID) REFERENCES SkiClub(MID)
-  --, Constraint FK_Condo_RID Foreign Key (RID) REFERENCES Condo_Reservation(RID)
+ -- , Constraint FK_Condo_RID Foreign Key (RID) REFERENCES Condo_Reservation(RID)
   );
 
 create table Payment (
-    MID number(5) 
-  , RID varchar2(10)
+    MID number(5) NOT NULL
+  , RID varchar2(10) NOT NULL
   , PaymentDate Date
   , Payment number(7,2)
+ -- , Constraint PK_Payment Primary Key (MID, RID)
   );
 
 --trip insert
@@ -65,14 +66,14 @@ INSERT INTO Trip VALUES(4, 'Taos Ski Valley', TO_DATE('02/11/2018', 'MM/DD/YYYY'
 
 
 --Condo reservation insert
-INSERT INTO Condo_Reservation VALUES('R10', '1',  'Lewis Ranch',  320,  3,  'M');
-INSERT INTO Condo_Reservation VALUES('R11', '1',  'Lewis Ranch',  321,  3,  'F');
-INSERT INTO Condo_Reservation VALUES('R12', '2',  'Heavenly Village', 304,  2,  'M');
-INSERT INTO Condo_Reservation VALUES('R13', '2',  'Heavenly Village', 284,  1,  'F');
-INSERT INTO Condo_Reservation VALUES('R14', '3',  'South Shore',  262,  1,  'M');
-INSERT INTO Condo_Reservation VALUES('R15', '3',  'South Shore',  263,  4,  'F');
-INSERT INTO Condo_Reservation VALUES('R16', '4',  'Cozy Mtn', 301,  3,  'F');
-INSERT INTO Condo_Reservation VALUES('R17', '4',  'Cozy Mtn', 302,  3,  'M');
+INSERT INTO Condo_Reservation VALUES('R10', 1,  'Lewis Ranch',  320,  3,  'M');
+INSERT INTO Condo_Reservation VALUES('R11', 1,  'Lewis Ranch',  321,  3,  'F');
+INSERT INTO Condo_Reservation VALUES('R12', 2,  'Heavenly Village', 304,  2,  'M');
+INSERT INTO Condo_Reservation VALUES('R13', 2,  'Heavenly Village', 284,  1,  'F');
+INSERT INTO Condo_Reservation VALUES('R14', 3,  'South Shore',  262,  1,  'M');
+INSERT INTO Condo_Reservation VALUES('R15', 3,  'South Shore',  263,  4,  'F');
+INSERT INTO Condo_Reservation VALUES('R16', 4,  'Cozy Mtn', 301,  3,  'F');
+INSERT INTO Condo_Reservation VALUES('R17', 4,  'Cozy Mtn', 302,  3,  'M');
 
 -- skiclub insert
 INSERT INTO SkiClub VALUES(100, 'John', 'Snyder',  'I',  'M');
