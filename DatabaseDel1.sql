@@ -29,7 +29,7 @@ create table Condo_Reservation (
   , Unit_NO number(7) 
   , Bldg number(2)
   , Gender char(1)
-  , Constraint PK_Condo_Res Primary Key(RID)
+  , Constraint PK_Condo_Res Primary Key(RID, TID)
   , Constraint FK_Condo_Res Foreign Key(TID) REFERENCES Trip(TID)
   );
 
@@ -45,6 +45,9 @@ create table SkiClub (
 create table Condo_Assign (
     MID number(5) 
   , RID varchar2(10)
+  , Constraint PK_Condo_Assign Primary Key (MID, RID);
+  , Constraint FK_Condo_MID Foreign Key (MID) REFERENCES SkiClub(MID)
+  , Constraint FK_Condo_RID Foreign Key (RID) REFERENCES Condo_Reservation(RID)
   );
 
 create table Payment (
