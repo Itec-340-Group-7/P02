@@ -46,7 +46,7 @@ create table Payment (
   , Payment number(7,2)
   );
 
---Done by Steven Horton
+--Done by Steven 
 --INSERT INTO Trip VALUES();
 
 --INSERT INTO Condo_Reservation VALUES();
