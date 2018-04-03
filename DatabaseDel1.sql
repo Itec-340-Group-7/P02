@@ -55,7 +55,6 @@ create table Payment (
   , RID varchar2(10)
   , PaymentDate Date
   , Payment number(7,2)
-
   );
 
 --trip insert
@@ -76,13 +75,13 @@ INSERT INTO Condo_Reservation VALUES('R16', '4',  'Cozy Mtn', 301,  3,  'F');
 INSERT INTO Condo_Reservation VALUES('R17', '4',  'Cozy Mtn', 302,  3,  'M');
 
 -- skiclub insert
-INSERT INTO SkiClub VALUES(100, 'John Snyder',  'I',  'M');
-INSERT INTO SkiClub VALUES(600, 'Sally Treville',  'E',  'F');
-INSERT INTO SkiClub VALUES(102, 'Gerald Warner',  'I',  'M');
-INSERT INTO SkiClub VALUES(104, 'Katie Johnson',  'I',  'F');
-INSERT INTO SkiClub VALUES(601, 'Matt  Kingston',  'E',  'M');
-INSERT INTO SkiClub VALUES(108, 'Tom Rivers',  'I',  'M');
-INSERT INTO SkiClub VALUES(109, 'Tom Singleton',  'E',  'M');
+INSERT INTO SkiClub VALUES(100, 'John', 'Snyder',  'I',  'M');
+INSERT INTO SkiClub VALUES(600, 'Sally', 'Treville',  'E',  'F');
+INSERT INTO SkiClub VALUES(102, 'Gerald', 'Warner',  'I',  'M');
+INSERT INTO SkiClub VALUES(104, 'Katie', 'Johnson',  'I',  'F');
+INSERT INTO SkiClub VALUES(601, 'Matt', 'Kingston',  'E',  'M');
+INSERT INTO SkiClub VALUES(108, 'Tom', 'Rivers',  'I',  'M');
+INSERT INTO SkiClub VALUES(109, 'Tom', 'Singleton',  'E',  'M');
 
 --Condo rooms insert
 INSERT INTO Condo_Assign VALUES(100, 'R10');
