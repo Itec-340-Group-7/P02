@@ -4,7 +4,9 @@
 --ITEC 340
 
 SET Echo ON;
-set serveroutput ON;
+SET serveroutput ON;
+SET Linesize 100;
+
 drop table Trip;
 drop table Condo_Reservation;
 drop table SkiClub;
@@ -49,11 +51,12 @@ create table Payment (
 
 --Done by Steven 
 --trip insert
-INSERT INTO Trip VALUES(1, 'Copper Mtn',  TO_DATE('01/21/2018', 'MM/DD/YYY'), 'Copper',  'CO');
---INSERT INTO Trip VALUES(2, 'Heavenly Mtn',  TO_DATE('01/28/2018', 'MM/DD/YYY'), 'Lake Tahoo',  'CA');
---INSERT INTO Trip VALUES(3, 'Squaw Valley',  TO_DATE('02/04/2018', 'MM/DD/YYY'),  'Lake Tahoo',  'CA');
---INSERT INTO Trip VALUES(4, 'Taos Ski Valley', TO_DATE('02/11/2018', 'MM/DD/YYY'), 'Taos',  'NM');
+INSERT INTO Trip VALUES(1, 'Copper Mtn',  TO_DATE('01/21/2018', 'MM/DD/YYYY'), 'Copper',  'CO');
+INSERT INTO Trip VALUES(2, 'Heavenly Mtn',  TO_DATE('01/28/2018', 'MM/DD/YYYY'), 'Lake Tahoo',  'CA');
+INSERT INTO Trip VALUES(3, 'Squaw Valley',  TO_DATE('02/04/2018', 'MM/DD/YYYY'),  'Lake Tahoo',  'CA');
+INSERT INTO Trip VALUES(4, 'Taos Ski Valley', TO_DATE('02/11/2018', 'MM/DD/YYYY'), 'Taos',  'NM');
 
+SELECT * FROM Trip;
 --INSERT INTO Condo_Reservation VALUES();
 
 --INSERT INTO SkiClub VALUES();
