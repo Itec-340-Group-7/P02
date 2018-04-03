@@ -56,7 +56,7 @@ INSERT INTO Trip VALUES(2, 'Heavenly Mtn',  TO_DATE('01/28/2018', 'MM/DD/YYYY'),
 INSERT INTO Trip VALUES(3, 'Squaw Valley',  TO_DATE('02/04/2018', 'MM/DD/YYYY'),  'Lake Tahoo',  'CA');
 INSERT INTO Trip VALUES(4, 'Taos Ski Valley', TO_DATE('02/11/2018', 'MM/DD/YYYY'), 'Taos',  'NM');
 
-SELECT * FROM Trip;
+
 --INSERT INTO Condo_Reservation VALUES();
 
 --INSERT INTO SkiClub VALUES();
@@ -64,3 +64,4 @@ SELECT * FROM Trip;
 --INSERT INTO Condo_Assign VALUES();
 
 --INSERT INTO Payment VALUES();
+SELECT * FROM Trip;
