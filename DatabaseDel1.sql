@@ -5,12 +5,13 @@
 
 SET Echo ON;
 set serveroutput ON;
-drop table Enroll;
-drop table Class;
-drop table Student;
-drop table Instructor;
+drop table Trip;
+drop table Condo_Reservation;
+drop table SkiClub;
+drop table Condo_Assign;
+drop table Payment;
 create table Trip (
-	TID number(1) NOT NULL
+  TID number(1) NOT NULL
   , Resort varchar2(30) 
   , Sun_Date Date
   , City varchar2(30)
@@ -18,7 +19,7 @@ create table Trip (
   , Constraint PK_Trip Primary Key(TID)
   );
 create table Condo_Reservation (
-	RID varchar2(10) NOT NULL
+  RID varchar2(10) NOT NULL
   , TID varchar2(30) NOT NULL
   , Name varchar2(30) 
   , Unit_NO number(7) 
@@ -28,7 +29,7 @@ create table Condo_Reservation (
   , Constraint FK_Condo_Res Foreign Key(TID) REFERENCES Trip(TID)
   );
 create table SkiClub (
-	MID number(5) NOT NULL
+  MID number(5) NOT NULL
   , First varchar2(15)
   , Last varchar2(20)
   , Exp_Level char(1)
@@ -47,7 +48,11 @@ create table Payment (
   );
 
 --Done by Steven 
---INSERT INTO Trip VALUES();
+--trip insert
+INSERT INTO Trip VALUES(1, 'Copper Mtn',  TO_DATE('1/21/2018'), 'Copper',  'CO');
+INSERT INTO Trip VALUES(2, 'Heavenly Mtn',  TO_DATE('1/28/2018'), 'Lake Tahoo',  'CA');
+INSERT INTO Trip VALUES(3, 'Squaw Valley',  TO_DATE('2/4/2018'),  'Lake Tahoo',  'CA');
+INSERT INTO Trip VALUES(4, 'Taos Ski Valley', TO_DATE('2/11/2018'), 'Taos',  'NM');
 
 --INSERT INTO Condo_Reservation VALUES();
 
