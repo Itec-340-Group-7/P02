@@ -42,3 +42,7 @@ create table Payment (
   , PaymentDate Date
   , Payment number(7,2)
   );
+
+
+--insert into 
+--adfa
