@@ -55,7 +55,7 @@ create table Payment (
   , RID varchar2(10)
   , PaymentDate Date
   , Payment number(7,2)
-  
+
   );
 
 --Done by Steven 
@@ -66,7 +66,15 @@ INSERT INTO Trip VALUES(3, 'Squaw Valley',  TO_DATE('02/04/2018', 'MM/DD/YYYY'),
 INSERT INTO Trip VALUES(4, 'Taos Ski Valley', TO_DATE('02/11/2018', 'MM/DD/YYYY'), 'Taos',  'NM');
 
 
---INSERT INTO Condo_Reservation VALUES();
+
+INSERT INTO Condo_Reservation VALUES('R10',	'1',	'Lewis Ranch',	320,	3,	'M');
+INSERT INTO Condo_Reservation VALUES('R11',	'1',	'Lewis Ranch',	321,	3,	'F');
+INSERT INTO Condo_Reservation VALUES('R12',	'2',	'Heavenly Village',	304,	2,	'M');
+INSERT INTO Condo_Reservation VALUES('R13',	'2',	'Heavenly Village',	284,	1,	'F');
+INSERT INTO Condo_Reservation VALUES('R14',	'3',	'South Shore',	262,	1,	'M');
+INSERT INTO Condo_Reservation VALUES('R15',	'3',	'South Shore',	263,	4,	'F');
+INSERT INTO Condo_Reservation VALUES('R16',	'4',	'Cozy Mtn',	301,	3,	'F');
+INSERT INTO Condo_Reservation VALUES('R17',	'4',	'Cozy Mtn',	302,	3,	'M');
 
 --INSERT INTO SkiClub VALUES();
 
@@ -74,3 +82,7 @@ INSERT INTO Trip VALUES(4, 'Taos Ski Valley', TO_DATE('02/11/2018', 'MM/DD/YYYY'
 
 --INSERT INTO Payment VALUES();
 SELECT * FROM Trip;
+SELECT * FROM Condo_Reservation;
+--SELECT * FROM SkiClub;
+--SELECT * FROM Condo_Assign;
+--SELECT * FROM Payment;
