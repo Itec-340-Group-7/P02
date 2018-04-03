@@ -65,3 +65,4 @@ INSERT INTO Trip VALUES(4, 'Taos Ski Valley', TO_DATE('02/11/2018', 'MM/DD/YYYY'
 
 --INSERT INTO Payment VALUES();
 SELECT * FROM Trip;
+sdjgfsdfg
