@@ -12,6 +12,7 @@ drop table Condo_Reservation;
 drop table SkiClub;
 drop table Condo_Assign;
 drop table Payment;
+
 create table Trip (
     TID number(1) NOT NULL
   , Resort varchar2(30) 
@@ -20,6 +21,7 @@ create table Trip (
   , State varchar2(2)
   , Constraint PK_Trip Primary Key(TID)
   );
+
 create table Condo_Reservation (
     RID varchar2(10) NOT NULL
   , TID varchar2(30) NOT NULL
@@ -30,6 +32,7 @@ create table Condo_Reservation (
   , Constraint PK_Condo_Res Primary Key(RID)
   , Constraint FK_Condo_Res Foreign Key(TID) REFERENCES Trip(TID)
   );
+
 create table SkiClub (
     MID number(5) NOT NULL
   , First varchar2(15)
@@ -38,10 +41,12 @@ create table SkiClub (
   , Gender char(1)
   , Constraint PK_Class Primary Key(MID)
   );
+
 create table Condo_Assign (
     MID number(5) 
   , RID varchar2(10)
   );
+
 create table Payment (
     MID number(5) 
   , RID varchar2(10)
