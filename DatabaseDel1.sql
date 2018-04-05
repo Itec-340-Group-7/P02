@@ -19,7 +19,7 @@ create table Trip (
   , Sun_Date Date
   , City varchar2(30)
   , State varchar2(2)
-  --, Constraint PK_Trip Primary Key(TID)
+  , Constraint PK_Trip Primary Key(TID)
   );
 
 create table Condo_Reservation (
@@ -30,7 +30,6 @@ create table Condo_Reservation (
   , Bldg number(2)
   , Gender char(1)
   , Constraint PK_Condo_Res Primary Key(RID, TID)
-  --, Constraint FK_Condo_Res Foreign Key(TID) REFERENCES Trip(TID)
   );
 
 create table SkiClub (
@@ -46,8 +45,6 @@ create table Condo_Assign (
     MID number(5) NOT NULL
   , RID varchar2(10) NOT NULL
   , Constraint PK_Condo_Assign Primary Key (MID, RID)
- -- , Constraint FK_Condo_MID Foreign Key (MID) REFERENCES SkiClub(MID)
- -- , Constraint FK_Condo_RID Foreign Key (RID) REFERENCES Condo_Reservation(RID)
   );
 
 create table Payment (
@@ -55,7 +52,7 @@ create table Payment (
   , RID varchar2(10) NOT NULL
   , PaymentDate Date
   , Payment number(7,2)
- -- , Constraint PK_Payment Primary Key (MID, RID)
+ , Constraint PK_Payment Primary Key (MID, RID, PaymentDate)
   );
 
 --trip insert
