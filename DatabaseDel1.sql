@@ -30,6 +30,8 @@ create table Condo_Reservation (
   , Bldg number(2)
   , Gender char(1)
   , Constraint PK_Condo_Res Primary Key(RID, TID)
+  , Constraint CH_Gender CHECK (Gender = 'M' or Gender = 'F')
+  , Constraint CH_Capacity CHECK (TID >= 4)
   );
 
 create table SkiClub (
@@ -39,6 +41,8 @@ create table SkiClub (
   , Exp_Level char(1)
   , Gender char(1)
   , Constraint PK_Class Primary Key(MID)
+  , Constraint CH_Gender2 CHECK (Gender = 'M' or Gender ='F')
+  , Constriant CH_Exp Check (Exp_Level = 'B' or Exp_Level = 'I' or Exp_level = 'E')
   );
 
 create table Condo_Assign (
@@ -52,7 +56,8 @@ create table Payment (
   , RID varchar2(10) NOT NULL
   , PaymentDate Date
   , Payment number(7,2)
- , Constraint PK_Payment Primary Key (MID, RID, PaymentDate)
+  , Constraint PK_Payment Primary Key (MID, RID, PaymentDate)
+  , Constraint CH_Payment Check (Payment > 150)
   );
 
 --trip insert
