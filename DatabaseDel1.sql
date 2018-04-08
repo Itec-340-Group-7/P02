@@ -42,7 +42,7 @@ create table SkiClub (
   , Gender char(1)
   , Constraint PK_Class Primary Key(MID)
   , Constraint CH_Gender2 CHECK (Gender = 'M' or Gender ='F')
-  , Constriant CH_Exp Check (Exp_Level = 'B' or Exp_Level = 'I' or Exp_level = 'E')
+  , Constraint CH_Exp Check (Exp_Level = 'B' or Exp_Level = 'I' or Exp_level = 'E')
   );
 
 create table Condo_Assign (
