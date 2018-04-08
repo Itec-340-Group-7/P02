@@ -57,7 +57,7 @@ create table Payment (
   , PaymentDate Date
   , Payment number(7,2)
   , Constraint PK_Payment Primary Key (MID, RID, PaymentDate)
-  , Constraint CH_Payment Check (Payment > -150.00)
+  , Constraint CH_Payment Check (Payment >= -150.00)
   );
 
 --trip insert
