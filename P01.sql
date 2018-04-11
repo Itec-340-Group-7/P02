@@ -1,6 +1,6 @@
--- Austin Crockett 
--- Steven Horton
--- Colin Ryan
+-- Austin Crockett - created tables
+-- Steven Horton - created inserts
+-- Colin Ryan- created constraints
 -- ITEC 340
 
 SET Echo ON;
