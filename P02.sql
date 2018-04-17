@@ -74,11 +74,33 @@ CREATE TABLE ReserveError
   MID NUMBER
 , RID varchar2(5)
 , errorDate date
-, errorCode NUMBER(2)
-, errorMsg varchar2(15)
+, errorCode NUMBER(12)
+, errorMsg varchar2(50)
 , Constraint Error_PK Primary Key (MID, RID, errorDate)
 , Constraint Error_FK FOREIGN Key (MID,RID) references Condo_Assign
 );
+
+  -- procedure addPayment 
+  -- (
+  --   P_MID Payment.MID%type
+  --   , P_RID Payment.RID%type
+  --   , P_Date Payment.PaymentDate%type
+  --   , P_Payment Payment.Payment%type
+  --   )
+  -- is 
+  -- Amount_Count NUMBER;
+  -- Amount_Debt decimal (5, 2);
+  -- Amount_Owed decimal(5, 2);
+  -- Payments_Made decimal(5, 2);
+  -- begin
+  -- Insert into Payment Values (P_MID, P_RID, P_Date, P_Payment);
+  -- select Count(MID) into Amount_Count from Payment where MID = P_MID;
+  -- Amount_Debt := 100 * Amount_Count;
+  -- select sum(payment) into Payments_Made from Payment where MID = P_MID;
+  -- Amount_Owed := Amount_Debt - Payments_Made; 
+  -- if Amount_Owed
+  -- end addPayment;
+  -- /
 
 INSERT INTO SkiClub (MID, First, Last, Exp_Level, Gender)
 VALUES (100, 'John', 'Snyder', 'I', 'M');
@@ -302,6 +324,8 @@ create or replace
   Gender_Room_Check Condo_Reservation.Gender%type;
   Member_Gender_Check Condo_Assign.RID%type;
   Count_Chk Condo_Assign.MID%type;
+  Gender_Error VARCHAR2 (50) := 'Invalid gender for this room';
+  Count_Error VARCHAR2 (50) := 'To many people already assigned to this room';
   begin
   select Count(RID) into Count_Chk from Condo_Assign where RID = P_RID; 
 
@@ -314,9 +338,11 @@ create or replace
     if Gender_Room_Check = Member_Gender_Check AND Count_Chk < 4 then
   Insert into Condo_Assign Values (P_MID, P_RID);
   elsif Count_Chk >= 4 then
-   DBMS_OUTPUT.PUT_LINE('To many people already assigned to this room');
+   DBMS_OUTPUT.PUT_LINE(Count_Error);
+  -- INSERT INTO ReserveError VALUES (P_MID, P_RID, SYSDATE, 1, Count_Error);
   elsif Gender_Room_Check != Member_Gender_Check then 
-  DBMS_OUTPUT.PUT_LINE('Invalid gender for this room');
+  DBMS_OUTPUT.PUT_LINE(Gender_Error);
+  --INSERT INTO ReserveError VALUES (P_MID, P_RID, SYSDATE, 2, Gender_Error);
   end if;
   end addCondo_Assign;
   /
@@ -331,5 +357,11 @@ execute addCondo_Assign(109, 'R17');
 
 execute addCondo_Assign(100, 'R11'); 
 
+ROLLBACK;
 
-ROLLBACK; 
+select * from Trip;
+select * from SkiClub;
+select * from Condo_Reservation;
+select * from Condo_Assign;
+select * from Payment;
+select * from ReserveError; 
