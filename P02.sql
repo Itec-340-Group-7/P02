@@ -68,6 +68,17 @@ CREATE TABLE Payment
 ,   CONSTRAINT  Ski_Mem_Pay_FK Foreign key (MID) references SkiClub
 );
 
+CREATE TABLE ReserveError
+(
+	MID NUMBER
+,	RID varchar2(5)
+,	errorDate date
+,	errorCode NUMBER(2)
+,	errorMsg varchar2(15)
+,	Constraint Error_PK Primary Key (MID, RID, errorDate)
+,	Constraint Error_FK FOREIGN Key (MID,RID) references Condo_Assign
+);
+
 INSERT INTO SkiClub (MID, First, Last, Exp_Level, Gender)
 VALUES (100, 'John', 'Snyder', 'I', 'M');
 
@@ -309,7 +320,7 @@ create or replace
 	end addCondo_Assign;
 	/
 
-	
+
 
 
 execute addCondo_Assign(100, 'R14');
