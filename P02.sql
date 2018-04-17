@@ -7,76 +7,77 @@
 SET ECHO ON;
 set serveroutput on;
 
+DROP table ReserveError;
 drop table Payment;
 DROP TABLE Condo_Assign;
-DROP TABLE Condo_Reservation;
 DROP TABLE SkiClub;
+DROP TABLE Condo_Reservation;
 DROP TABLE Trip;
 
 CREATE TABLE Trip
 (
-	TID	NUMBER
-,	Resort	VARCHAR2(25) not null
-,	Sun_Date date
-,	City varchar2(15)
-,	State varchar2(15)
+  TID NUMBER
+, Resort  VARCHAR2(25) not null
+, Sun_Date date
+, City varchar2(15)
+, State varchar2(15)
 ,   CONSTRAINT Trip_PK Primary Key (TID)
 );
 
 CREATE TABLE Condo_Reservation
 (
-	RID varchar(5)
+  RID varchar(5)
 ,   TID NUMBER
-,	Name	VARCHAR2(30) not null
-,	Unit_NO NUMBER
+, Name  VARCHAR2(30) not null
+, Unit_NO NUMBER
 ,   Bldg NUMBER
 ,   Gender char(1) not null
-,	CONSTRAINT RID_PK PRIMARY KEY(RID)
-,	CONSTRAINT Trip_Res Foreign Key (TID) references Trip 
+, CONSTRAINT RID_PK PRIMARY KEY(RID)
+, CONSTRAINT Trip_Res Foreign Key (TID) references Trip 
 ,   Constraint Gen_CK Check (Gender in ('M', 'F'))
 );
 
 CREATE TABLE SkiClub
 (
-	MID			NUMBER
-,	First        VARCHAR2(16) not null
-,	Last   	    Varchar2(20) not null
-,	Exp_Level   Char(1)
+  MID     NUMBER
+, First        VARCHAR2(16) not null
+, Last        Varchar2(20) not null
+, Exp_Level   Char(1)
 ,   Gender      Char(1) not null
-,	CONSTRAINT  SkiClub_PK PRIMARY KEY(MID)
-,	CONSTRAINT  Level_Chk CHECK(Exp_Level in ('B', 'I', 'E'))
+, CONSTRAINT  SkiClub_PK PRIMARY KEY(MID)
+, CONSTRAINT  Level_Chk CHECK(Exp_Level in ('B', 'I', 'E'))
 ,   CONSTRAINT  Gender_Chk Check (Gender in ('M', 'F'))
 );
 
 CREATE TABLE Condo_Assign
 (
-	MID NUMBER
+  MID NUMBER
 ,   RID varchar2(5)
-,	CONSTRAINT  Condo_Assign_PK PRIMARY KEY(MID, RID)
-,	CONSTRAINT  Condo_Res_FK FOREIGN KEY (RID) REFERENCES Condo_Reservation
+, CONSTRAINT  Condo_Assign_PK PRIMARY KEY(MID, RID)
+, CONSTRAINT  Condo_Res_FK FOREIGN KEY (RID) REFERENCES Condo_Reservation
 ,   CONSTRAINT  Ski_Mem_FK Foreign key (MID) references SkiClub
 );
 
 CREATE TABLE Payment
 (
-	MID NUMBER
+  MID NUMBER
 ,   RID varchar2(5)
 ,   PaymentDate date
-,	Payment decimal(5,2) 
-,	CONSTRAINT  Payment_Ski_PK PRIMARY KEY(MID, RID, PaymentDate)
-,	CONSTRAINT  Trip_Pay_FK FOREIGN KEY (MID, RID) REFERENCES Condo_Assign
+, Payment decimal(5,2) 
+, CONSTRAINT  Payment_Ski_PK PRIMARY KEY(MID, RID, PaymentDate)
+, CONSTRAINT  Trip_Pay_FK FOREIGN KEY (MID, RID) REFERENCES Condo_Assign
 ,   CONSTRAINT  Ski_Mem_Pay_FK Foreign key (MID) references SkiClub
 );
 
 CREATE TABLE ReserveError
 (
-	MID NUMBER
-,	RID varchar2(5)
-,	errorDate date
-,	errorCode NUMBER(2)
-,	errorMsg varchar2(15)
-,	Constraint Error_PK Primary Key (MID, RID, errorDate)
-,	Constraint Error_FK FOREIGN Key (MID,RID) references Condo_Assign
+  MID NUMBER
+, RID varchar2(5)
+, errorDate date
+, errorCode NUMBER(2)
+, errorMsg varchar2(15)
+, Constraint Error_PK Primary Key (MID, RID, errorDate)
+, Constraint Error_FK FOREIGN Key (MID,RID) references Condo_Assign
 );
 
 INSERT INTO SkiClub (MID, First, Last, Exp_Level, Gender)
@@ -263,72 +264,72 @@ select * from Condo_Assign;
 select * from Payment;
 
 create or replace 
-	procedure addTrip 
-	(
-		P_TID Trip.TID%type
-	  , P_Resort Trip.Resort%type
-	  , P_Sun_Date Trip.Sun_Date%type
-	  , P_City Trip.City%type
-	  , P_State Trip.State%type
-		)
-	is 
-	begin
-	Insert into Trip Values (P_TID, P_Resort, P_Sun_Date, P_City, P_State);
-	end addTrip;
-	/
+  procedure addTrip 
+  (
+    P_TID Trip.TID%type
+    , P_Resort Trip.Resort%type
+    , P_Sun_Date Trip.Sun_Date%type
+    , P_City Trip.City%type
+    , P_State Trip.State%type
+    )
+  is 
+  begin
+  Insert into Trip Values (P_TID, P_Resort, P_Sun_Date, P_City, P_State);
+  end addTrip;
+  /
 
-	create or replace 
-	procedure addSkiClub
-	(
-		P_MID SkiClub.MID%type
-	  , P_First SkiClub.First%type
-	  , P_Last SkiClub.Last%type
-	  , P_Exp_Level SkiClub.Exp_Level%type
-	  , P_Gender SkiClub.Gender%type
-		)
-	is 
-	begin
-	Insert into SkiClub Values (P_MID, P_First, P_Last, P_Exp_Level, P_Gender);
-	end addSkiClub;
-	/	
+  create or replace 
+  procedure addSkiClub
+  (
+    P_MID SkiClub.MID%type
+    , P_First SkiClub.First%type
+    , P_Last SkiClub.Last%type
+    , P_Exp_Level SkiClub.Exp_Level%type
+    , P_Gender SkiClub.Gender%type
+    )
+  is 
+  begin
+  Insert into SkiClub Values (P_MID, P_First, P_Last, P_Exp_Level, P_Gender);
+  end addSkiClub;
+  / 
 
-	create or replace 
-	procedure addCondo_Assign
-	(
-		P_MID Condo_Assign.MID%type
-	  , P_RID Condo_Assign.RID%type
-	  ) is 
-	Gender_Room_Check Condo_Reservation.Gender%type;
-	Member_Gender_Check Condo_Assign.RID%type;
-	Count_Chk Condo_Assign.MID%type;
-	begin
-	select Count(RID) into Count_Chk from Condo_Assign where RID = P_RID; 
+  create or replace 
+  procedure addCondo_Assign
+  (
+    P_MID Condo_Assign.MID%type
+    , P_RID Condo_Assign.RID%type
+    ) is 
+  Gender_Room_Check Condo_Reservation.Gender%type;
+  Member_Gender_Check Condo_Assign.RID%type;
+  Count_Chk Condo_Assign.MID%type;
+  begin
+  select Count(RID) into Count_Chk from Condo_Assign where RID = P_RID; 
 
-	select Gender into Gender_Room_Check from Condo_Reservation 
-	where Condo_Reservation.RID = P_RID;
+  select Gender into Gender_Room_Check from Condo_Reservation 
+  where Condo_Reservation.RID = P_RID;
 
-	select Gender into Member_Gender_Check from SkiClub 
-	where SkiClub.MID = P_MID;
+  select Gender into Member_Gender_Check from SkiClub 
+  where SkiClub.MID = P_MID;
 
     if Gender_Room_Check = Member_Gender_Check AND Count_Chk < 4 then
-	Insert into Condo_Assign Values (P_MID, P_RID);
-	elsif Count_Chk >= 4 then
-	 DBMS_OUTPUT.PUT_LINE('To many people already assigned to this room');
-	elsif Gender_Room_Check != Member_Gender_Check then 
-	DBMS_OUTPUT.PUT_LINE('Invalid gender for this room');
-	end if;
-	end addCondo_Assign;
-	/
-
-
-
+  Insert into Condo_Assign Values (P_MID, P_RID);
+  elsif Count_Chk >= 4 then
+   DBMS_OUTPUT.PUT_LINE('To many people already assigned to this room');
+  elsif Gender_Room_Check != Member_Gender_Check then 
+  DBMS_OUTPUT.PUT_LINE('Invalid gender for this room');
+  end if;
+  end addCondo_Assign;
+  /
 
 execute addCondo_Assign(100, 'R14');
 execute addCondo_Assign(100, 'R17');
 execute addCondo_Assign(102, 'R17');
 execute addCondo_Assign(601, 'R17');
 execute addCondo_Assign(108, 'R17');
-execute addCondo_Assign(109, 'R17'); --this shows that you can only have 4 people in the room
-execute addCondo_Assign(100, 'R11'); --this shows that you have to have gender compatability 
+
+execute addCondo_Assign(109, 'R17'); 
+
+execute addCondo_Assign(100, 'R11'); 
+
 
 ROLLBACK; 
