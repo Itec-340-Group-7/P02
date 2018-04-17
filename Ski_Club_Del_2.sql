@@ -68,66 +68,6 @@ CREATE TABLE Payment
 ,   CONSTRAINT  Ski_Mem_Pay_FK Foreign key (MID) references SkiClub
 );
 
-commit;
-
-create or replace 
-	procedure addTrip 
-	(
-		P_TID Trip.TID%type
-	  , P_Resort Trip.Resort%type
-	  , P_Sun_Date Trip.Sun_Date%type
-	  , P_City Trip.City%type
-	  , P_State Trip.State%type
-		)
-	is 
-	begin
-	Insert into Trip Values (P_TID, P_Resort, P_Sun_Date, P_City, P_State);
-	end addTrip;
-	/
-
-	create or replace 
-	procedure addSkiClub
-	(
-		P_MID SkiClub.MID%type
-	  , P_First SkiClub.First%type
-	  , P_Last SkiClub.Last%type
-	  , P_Exp_Level SkiClub.Exp_Level%type
-	  , P_Gender SkiClub.Gender%type
-		)
-	is 
-	begin
-	Insert into SkiClub Values (P_MID, P_First, P_Last, P_Exp_Level, P_Gender);
-	end addSkiClub;
-	/	
-
-	create or replace 
-	procedure addCondo_Assign
-	(
-		P_MID Condo_Assign.MID%type
-	  , P_RID Condo_Assign.RID%type
-	  ) is 
-	Gender_Room_Check Condo_Reservation.Gender%type;
-	Member_Gender_Check Condo_Assign.RID%type;
-	Count_Chk Condo_Assign.MID%type;
-	begin
-	select Count(RID) into Count_Chk from Condo_Assign where RID = P_RID; 
-
-	select Gender into Gender_Room_Check from Condo_Reservation 
-	where Condo_Reservation.RID = P_RID;
-
-	select Gender into Member_Gender_Check from SkiClub 
-	where SkiClub.MID = P_MID;
-
-    if Gender_Room_Check = Member_Gender_Check AND Count_Chk < 4 then
-	Insert into Condo_Assign Values (P_MID, P_RID);
-	elsif Count_Chk >= 4 then
-	 DBMS_OUTPUT.PUT_LINE('To many people already assigned to this room');
-	elsif Gender_Room_Check != Member_Gender_Check then 
-	DBMS_OUTPUT.PUT_LINE('Invalid gender for this room');
-	end if;
-	end addCondo_Assign;
-	/
-
 INSERT INTO SkiClub (MID, First, Last, Exp_Level, Gender)
 VALUES (100, 'John', 'Snyder', 'I', 'M');
 
@@ -302,6 +242,74 @@ Values(104, 'R16', '8-Jan-18', 50.00);
 Insert into Payment (MID, RID, PaymentDate, Payment)
 Values(109, 'R16', '30-Dec-17', 50.00);
 
+commit;
+
+
+select * from Trip;
+select * from SkiClub;
+select * from Condo_Reservation;
+select * from Condo_Assign;
+select * from Payment;
+
+create or replace 
+	procedure addTrip 
+	(
+		P_TID Trip.TID%type
+	  , P_Resort Trip.Resort%type
+	  , P_Sun_Date Trip.Sun_Date%type
+	  , P_City Trip.City%type
+	  , P_State Trip.State%type
+		)
+	is 
+	begin
+	Insert into Trip Values (P_TID, P_Resort, P_Sun_Date, P_City, P_State);
+	end addTrip;
+	/
+
+	create or replace 
+	procedure addSkiClub
+	(
+		P_MID SkiClub.MID%type
+	  , P_First SkiClub.First%type
+	  , P_Last SkiClub.Last%type
+	  , P_Exp_Level SkiClub.Exp_Level%type
+	  , P_Gender SkiClub.Gender%type
+		)
+	is 
+	begin
+	Insert into SkiClub Values (P_MID, P_First, P_Last, P_Exp_Level, P_Gender);
+	end addSkiClub;
+	/	
+
+	create or replace 
+	procedure addCondo_Assign
+	(
+		P_MID Condo_Assign.MID%type
+	  , P_RID Condo_Assign.RID%type
+	  ) is 
+	Gender_Room_Check Condo_Reservation.Gender%type;
+	Member_Gender_Check Condo_Assign.RID%type;
+	Count_Chk Condo_Assign.MID%type;
+	begin
+	select Count(RID) into Count_Chk from Condo_Assign where RID = P_RID; 
+
+	select Gender into Gender_Room_Check from Condo_Reservation 
+	where Condo_Reservation.RID = P_RID;
+
+	select Gender into Member_Gender_Check from SkiClub 
+	where SkiClub.MID = P_MID;
+
+    if Gender_Room_Check = Member_Gender_Check AND Count_Chk < 4 then
+	Insert into Condo_Assign Values (P_MID, P_RID);
+	elsif Count_Chk >= 4 then
+	 DBMS_OUTPUT.PUT_LINE('To many people already assigned to this room');
+	elsif Gender_Room_Check != Member_Gender_Check then 
+	DBMS_OUTPUT.PUT_LINE('Invalid gender for this room');
+	end if;
+	end addCondo_Assign;
+	/
+
+
 execute addCondo_Assign(100, 'R14');
 execute addCondo_Assign(100, 'R17');
 execute addCondo_Assign(102, 'R17');
@@ -310,10 +318,4 @@ execute addCondo_Assign(108, 'R17');
 execute addCondo_Assign(109, 'R17'); --this shows that you can only have 4 people in the room
 execute addCondo_Assign(100, 'R11'); --this shows that you have to have gender compatability 
 
-COMMIT; 
-
-select * from Trip;
-select * from SkiClub;
-select * from Condo_Reservation;
-select * from Condo_Assign;
-select * from Payment;
+ROLLBACK; 
