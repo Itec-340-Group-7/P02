@@ -359,7 +359,7 @@ create or replace
   from Payment p
   where p.MID = :NEW.MID;
  -- DBMS_OUTPUT.PUT_LINE(sumBalance + :New.Payment);
-  if sumBalance < -150 then
+  if (sumBalance + :New.Payment) < -150 then
   DBMS_OUTPUT.PUT_LINE(sumBalance + :New.Payment);
   end if;
   end;
