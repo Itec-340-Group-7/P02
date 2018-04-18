@@ -347,23 +347,26 @@ create or replace
   end addCondo_Assign;
   /
 
+  DROP balance_ck_trigger; 
   create or replace Trigger balance_ck_trigger
   Before Insert on Payment
   FOR EACH ROW
   Declare 
   sumBalance number;
   begin
-
   select sum(p.payment)
     into sumBalance
   from Payment p
   where p.MID = :NEW.MID;
-
-  DBMS_OUTPUT.PUT_LINE(sumBalance);
-
+ -- DBMS_OUTPUT.PUT_LINE(sumBalance + :New.Payment);
+  if sumBalance < -150 then
+  DBMS_OUTPUT.PUT_LINE(sumBalance + :New.Payment);
+  end if;
   end;
   /
 
+Insert into Payment (MID, RID, PaymentDate, Payment)
+Values(109, 'R16', '30-Dec-18', -350.00);
 
 
 execute addCondo_Assign(100, 'R14');
