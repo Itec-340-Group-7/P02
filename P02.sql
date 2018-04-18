@@ -347,6 +347,25 @@ create or replace
   end addCondo_Assign;
   /
 
+  create or replace Trigger balance_ck_trigger
+  Before Insert or Update
+  on Payment
+  FOR EACH ROW
+  DECLARE
+  sumBalance number;
+  member varchar2;
+  begin
+
+  select sum(payment)
+  into sumBalance
+  from Payment p
+  where p.MID = :NEW.MID;
+
+  end;
+  /
+
+
+
 execute addCondo_Assign(100, 'R14');
 execute addCondo_Assign(100, 'R17');
 execute addCondo_Assign(102, 'R17');
