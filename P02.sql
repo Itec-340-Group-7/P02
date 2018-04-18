@@ -360,6 +360,7 @@ create or replace
   where p.MID = :NEW.MID;
  -- DBMS_OUTPUT.PUT_LINE(sumBalance + :New.Payment);
   if (sumBalance + :New.Payment) < -150 then
+  insert into ReserveError(MID, RID, errorDate, errorCode, errorMsg) values (:NEW.MID, :New.RID, SYSDATE, 123, 'You owe to much');
   DBMS_OUTPUT.PUT_LINE(sumBalance + :New.Payment);
   end if;
   end;
@@ -368,6 +369,7 @@ create or replace
 Insert into Payment (MID, RID, PaymentDate, Payment)
 Values(109, 'R16', '30-Dec-18', -350.00);
 
+select * from ReserveError;
 
 execute addCondo_Assign(100, 'R14');
 execute addCondo_Assign(100, 'R17');
