@@ -382,10 +382,3 @@ execute addCondo_Assign(109, 'R17');
 execute addCondo_Assign(100, 'R11'); 
 
 ROLLBACK;
-
-select * from Trip;
-select * from SkiClub;
-select * from Condo_Reservation;
-select * from Condo_Assign;
-select * from Payment;
-select * from ReserveError; 
