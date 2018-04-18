@@ -348,18 +348,18 @@ create or replace
   /
 
   create or replace Trigger balance_ck_trigger
-  Before Insert or Update
-  on Payment
+  Before Insert on Payment
   FOR EACH ROW
-  DECLARE
+  Declare 
   sumBalance number;
-  member varchar2;
   begin
 
-  select sum(payment)
-  into sumBalance
+  select sum(p.payment)
+    into sumBalance
   from Payment p
   where p.MID = :NEW.MID;
+
+  DBMS_OUTPUT.PUT_LINE(sumBalance);
 
   end;
   /
