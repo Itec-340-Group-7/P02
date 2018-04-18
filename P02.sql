@@ -7,6 +7,7 @@
 SET ECHO ON;
 set serveroutput on;
 
+ DROP trigger balance_ck_trigger;
 DROP table ReserveError;
 drop table Payment;
 DROP TABLE Condo_Assign;
@@ -339,15 +340,25 @@ create or replace
   Insert into Condo_Assign Values (P_MID, P_RID);
   elsif Count_Chk >= 4 then
    DBMS_OUTPUT.PUT_LINE(Count_Error);
-  -- INSERT INTO ReserveError VALUES (P_MID, P_RID, SYSDATE, 1, Count_Error);
+ -- insert into ReserveError(MID, RID, errorDate, errorCode, errorMsg) VALUES (P_MID, P_RID, SYSDATE, 1, 'To many people already assigned to this room');
   elsif Gender_Room_Check != Member_Gender_Check then 
   DBMS_OUTPUT.PUT_LINE(Gender_Error);
-  --INSERT INTO ReserveError VALUES (P_MID, P_RID, SYSDATE, 2, Gender_Error);
+  -- insert into ReserveError(MID, RID, errorDate, errorCode, errorMsg) VALUES (P_MID, P_RID, SYSDATE, 2, 'Invalid gender for this room');
   end if;
   end addCondo_Assign;
   /
+  execute addCondo_Assign(100, 'R14');
+  execute addCondo_Assign(100, 'R17');
+  execute addCondo_Assign(102, 'R17');
+  execute addCondo_Assign(601, 'R17');
+  execute addCondo_Assign(108, 'R17');
+  execute addCondo_Assign(109, 'R17'); 
+  execute addCondo_Assign(100, 'R11'); 
 
-  DROP balance_ck_trigger; 
+
+  select * from ReserveError;
+
+ 
   create or replace Trigger balance_ck_trigger
   Before Insert on Payment
   FOR EACH ROW
@@ -370,15 +381,5 @@ Insert into Payment (MID, RID, PaymentDate, Payment)
 Values(109, 'R16', '30-Dec-18', -350.00);
 
 select * from ReserveError;
-
-execute addCondo_Assign(100, 'R14');
-execute addCondo_Assign(100, 'R17');
-execute addCondo_Assign(102, 'R17');
-execute addCondo_Assign(601, 'R17');
-execute addCondo_Assign(108, 'R17');
-
-execute addCondo_Assign(109, 'R17'); 
-
-execute addCondo_Assign(100, 'R11'); 
 
 ROLLBACK;
