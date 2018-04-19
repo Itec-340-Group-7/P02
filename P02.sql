@@ -8,6 +8,7 @@ SET ECHO ON;
 set serveroutput on;
 
 DROP trigger balance_ck_trigger;
+DROP SEQUENCE error_seq;
 DROP table ReserveError;
 drop table Payment;
 DROP TABLE Condo_Assign;
@@ -72,14 +73,23 @@ CREATE TABLE Payment
 
 CREATE TABLE ReserveError
 (
-  MID NUMBER
+  SEQ number(5)  not null
+, MID NUMBER
 , RID varchar2(5)
 , errorDate date
 , errorCode NUMBER
 , errorMsg varchar2(50)
-, Constraint Error_PK Primary Key (MID, RID, errorDate)
-, Constraint Error_FK FOREIGN Key (MID,RID) references Condo_Assign
+, Constraint Error_PK Primary Key (SEQ)
+, Constraint Error_FK FOREIGN Key (MID) references SkiClub
+, Constraint Error_FK1 FOREIGN Key (RID) references Condo_Reservation
 );
+
+CREATE SEQUENCE error_seq
+ START WITH    1
+ INCREMENT BY   1
+ minvalue 0
+ maxvalue 1000
+ CYCLE;
 
   -- procedure addPayment 
   -- (
@@ -363,14 +373,15 @@ create or replace
   Before Insert on Payment
   FOR EACH ROW
   Declare 
-  sumBalance number;
+  paidAmount number;
+  totalOwed number;
   roomCount number;
   genderRoomCheck Condo_Reservation.Gender%TYPE;
   memberGender SkiClub.Gender%Type;
   begin
 
   select sum(p.payment)
-    into sumBalance
+  into paidAmount
   from Payment p
   where p.MID = :NEW.MID ;
 
@@ -389,18 +400,25 @@ create or replace
  from SkiClub s
  where s.MID = :New.MID;
 
+ select count(ca.MID)
+ into totalOwed
+ from Condo_Assign ca
+ where ca.MID = :NEW.MID;
 
- DBMS_OUTPUT.PUT_LINE(roomCount || genderRoomCheck || memberGender);
 
-  if ((sumBalance + :New.Payment) < -150) 
+DBMS_OUTPUT.PUT_LINE(totalOwed*100 || paidAmount ||roomCount || genderRoomCheck || memberGender);
+
+
+  if ((totalOwed * 100)-(paidAmount + :New.Payment) > 150) 
     then
-      insert into ReserveError(MID, RID, errorDate, errorCode, errorMsg) values (:NEW.MID, :New.RID, SYSDATE, 123, 'You owe to much');
+      insert into ReserveError(SEQ, MID, RID, errorDate, errorCode, errorMsg) values (error_seq.nextval, :NEW.MID, :New.RID, SYSDATE, 123, 'You owe to much');
  end if;
 
   if (roomCount > 3)
     then
-      insert into ReserveError(MID, RID, errorDate, errorCode, errorMsg) values (:NEW.MID, :New.RID, SYSDATE, 231, 'Not enough room');
+      insert into ReserveError(SEQ, MID, RID, errorDate, errorCode, errorMsg) values (error_seq.nextval, :NEW.MID, :New.RID, SYSDATE, 231, 'Not enough room');
   end if;
+/**/
 
 /*
   if (memberGender != genderRoomCheck)
@@ -409,12 +427,14 @@ create or replace
       
  else
   DBMS_OUTPUT.PUT_LINE('sdfasf');
-end if;*/
+
+end if; */
+
+
   end;
   /
 
-Insert into Payment (MID, RID, PaymentDate, Payment)
-Values(109, 'R16', '30-Dec-18', -350.00);
+Insert into Payment (MID, RID, PaymentDate, Payment) Values(109, 'R16', '30-Dec-18', 50);
 
 select * from ReserveError;
 
