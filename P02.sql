@@ -7,7 +7,7 @@
 SET ECHO ON;
 set serveroutput on;
 
- DROP trigger balance_ck_trigger;
+DROP trigger balance_ck_trigger;
 DROP table ReserveError;
 drop table Payment;
 DROP TABLE Condo_Assign;
@@ -75,7 +75,7 @@ CREATE TABLE ReserveError
   MID NUMBER
 , RID varchar2(5)
 , errorDate date
-, errorCode NUMBER(12)
+, errorCode NUMBER
 , errorMsg varchar2(50)
 , Constraint Error_PK Primary Key (MID, RID, errorDate)
 , Constraint Error_FK FOREIGN Key (MID,RID) references Condo_Assign
@@ -364,16 +364,52 @@ create or replace
   FOR EACH ROW
   Declare 
   sumBalance number;
+  roomCount number;
+  genderRoomCheck Condo_Reservation.Gender%TYPE;
+  memberGender SkiClub.Gender%Type;
   begin
+
   select sum(p.payment)
     into sumBalance
   from Payment p
-  where p.MID = :NEW.MID;
- -- DBMS_OUTPUT.PUT_LINE(sumBalance + :New.Payment);
-  if (sumBalance + :New.Payment) < -150 then
-  insert into ReserveError(MID, RID, errorDate, errorCode, errorMsg) values (:NEW.MID, :New.RID, SYSDATE, 123, 'You owe to much');
-  DBMS_OUTPUT.PUT_LINE(sumBalance + :New.Payment);
+  where p.MID = :NEW.MID ;
+
+ select count (p.rid)
+ into roomCount
+ from Payment p
+ where p.rid = :NEW.RID;
+
+ select c.Gender
+ into genderRoomCheck
+ from Condo_Reservation c
+ where c.RID = :New.RID;
+
+ select s.Gender
+ into memberGender
+ from SkiClub s
+ where s.MID = :New.MID;
+
+
+ DBMS_OUTPUT.PUT_LINE(roomCount || genderRoomCheck || memberGender);
+
+  if ((sumBalance + :New.Payment) < -150) 
+    then
+      insert into ReserveError(MID, RID, errorDate, errorCode, errorMsg) values (:NEW.MID, :New.RID, SYSDATE, 123, 'You owe to much');
+ end if;
+
+  if (roomCount > 3)
+    then
+      insert into ReserveError(MID, RID, errorDate, errorCode, errorMsg) values (:NEW.MID, :New.RID, SYSDATE, 231, 'Not enough room');
   end if;
+
+/*
+  if (memberGender != genderRoomCheck)
+    then
+     insert into ReserveError(MID, RID, errorDate, errorCode, errorMsg) values (:NEW.MID, :New.RID, SYSDATE, 312, 'Gender incompatibility');
+      
+ else
+  DBMS_OUTPUT.PUT_LINE('sdfasf');
+end if;*/
   end;
   /
 
