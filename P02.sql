@@ -1,8 +1,12 @@
   -- Database I - ITEC 340 Spring 2018
   -- Ski Club Schema
-  --Austin Crockett
-  --Steven Horton
-  --Colin Ryan
+  --Austin Crockett 1/3 of the SP and half the trigger
+  --Steven Horton 1/3 of the SP and half of the trigger
+  --Colin Ryan 1/3 of the SP and the DML to test all procedures and triggers
+  --We were able to complete every part of the assignment except for stopping the insertion
+  --on the condo assign and payment tables. We thought the application errors would hault it
+  --but were ultimately unable to figure it out.
+
 
   SET ECHO ON;
   set serveroutput on;
@@ -275,6 +279,8 @@
     end addTrip;
     /
 
+    execute addTrip(5, 'Radford Mtn', SYSDATE, 'Radford', 'VA');
+
     create or replace 
     procedure addCondo
     (
@@ -314,6 +320,8 @@
     / 
 
     execute addSkiClub(666, 'Austin', 'Crockett', 'B', 'M');
+     execute addSkiClub(777, 'Colin', 'Ryan', 'B', 'M');
+      execute addSkiClub(888, 'Steven', 'Horton', 'B', 'M');
 
     create or replace 
     procedure addCondo_Assign
@@ -415,4 +423,3 @@
   select * from ReserveError;
 
   ROLLBACK;
-
