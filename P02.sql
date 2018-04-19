@@ -6,7 +6,7 @@
 
   SET ECHO ON;
   set serveroutput on;
-
+  Set linesize 100;
   DROP table ReserveError;
   drop table Payment;
   DROP TABLE Condo_Assign;
@@ -365,85 +365,35 @@
  where Condo_Reservation.RID = :new.RID;
 
  select Gender into Member_Gender_Check from SkiClub 
- where MID = :new.MID;
+ where SkiClub.MID = :new.MID;
 
   if ((totalOwed * 100)-(paidAmount + :New.Payment) > 150) 
     then
     DBMS_OUTPUT.PUT_LINE(Balance_Error);
       insert into ReserveError(SEQ, MID, RID, errorDate, errorCode, errorMsg) values (error_seq.nextval, :NEW.MID, :New.RID, SYSDATE, Balance_Number, Balance_Error);
-        RAISE_APPLICATION_ERROR(Balance_Number, Balance_Error);
+     RAISE_APPLICATION_ERROR(Balance_Number, Balance_Error);
  end if;
+
+  if Gender_Room_Check != Member_Gender_Check then 
+      DBMS_OUTPUT.PUT_LINE(Gender_Error);
+      INSERT INTO ReserveError VALUES (error_seq.nextVal, :new.MID, :new.RID, SYSDATE, Gender_Number, Gender_Error);
+      RAISE_APPLICATION_ERROR(Gender_Number, Gender_Error);
+  end if;
 
   if (roomCount > 3)
     then
     DBMS_OUTPUT.PUT_LINE(Count_Error);
       insert into ReserveError(SEQ, MID, RID, errorDate, errorCode, errorMsg) values (error_seq.nextval, :NEW.MID, :New.RID, SYSDATE, Count_Number, Count_Error);
-        RAISE_APPLICATION_ERROR(Count_Number, Count_Error);
+      RAISE_APPLICATION_ERROR(Count_Number, Count_Error);
   end if;
 
- if Gender_Room_Check != Member_Gender_Check then 
-      DBMS_OUTPUT.PUT_LINE(Gender_Error);
-      INSERT INTO ReserveError VALUES (Next_ID.nextVal, :new.MID, :new.RID, SYSDATE, Gender_Number, Gender_Error);
-      RAISE_APPLICATION_ERROR(Gender_Number, Gender_Error);
-  end if;
-
+  exception when others then null;
   end;
   /
-  --   CREATE OR REPLACE TRIGGER Balance_Check 
-  -- BEFORE Insert on Condo_Assign  
-  -- FOR EACH ROW
-  -- DECLARE
-  --     Amount_Count NUMBER;
-  --     Amount_Debt decimal (5, 2);
-  --     Amount_Owed decimal(5, 2);
-  --     Payments_Made decimal(5, 2);
-  --     Balance_Error varchar(50) := 'You owe over 150 dollars';
-  --     Gender_Room_Check Condo_Reservation.Gender%type;
-  --     Member_Gender_Check Condo_Reservation.Gender%type;
-  --     Count_Chk Condo_Assign.MID%type;
-  --     Gender_Error VARCHAR2 (50) := 'Invalid gender for this room';
-  --     Count_Error VARCHAR2 (50) := 'To many people already assigned to this room';
-  --     Balance_Number NUMBER := -20000;
-  --     Gender_Number NUMBER := -20001;
-  --     Count_Number NUMBER := -20002;
-  --   BEGIN 
-  --   select Count(MID) into Amount_Count from Condo_Assign where MID = :new.MID;
-  --   Amount_Debt := 100 * Amount_Count;
-
-  --   select sum(payment) into Payments_Made from Payment where MID = :new.MID;
-
-  --   Amount_Owed := Amount_Debt - Payments_Made;
-
-  --   select Count(RID) into Count_Chk from Condo_Assign where RID = :new.RID; 
-
-  --     select Gender into Gender_Room_Check from Condo_Reservation 
-  --     where Condo_Reservation.RID = :new.RID;
-
-  --     select Gender into Member_Gender_Check from SkiClub 
-  --     where MID = :new.MID;
-
-  --     if Count_Chk >= 4 then
-  --      DBMS_OUTPUT.PUT_LINE(Count_Error);
-  --      INSERT INTO ReserveError VALUES (Next_ID.nextVal, :new.MID, :new.RID, SYSDATE, Count_Number, Count_Error);
-  --      RAISE_APPLICATION_ERROR(Count_Number, Count_Error);
-
-  --     elsif Gender_Room_Check != Member_Gender_Check then 
-  --     DBMS_OUTPUT.PUT_LINE(Gender_Error);
-  --     INSERT INTO ReserveError VALUES (Next_ID.nextVal, :new.MID, :new.RID, SYSDATE, Gender_Number, Gender_Error);
-  --     RAISE_APPLICATION_ERROR(Gender_Number, Gender_Error);
-
-  --     elsif Amount_Owed > 150 then
-  --     DBMS_OUTPUT.PUT_LINE(Balance_Error);
-  --     insert into ReserveError values(Next_ID.nextVal, :new.MID, :new.RID, SYSDATE, Balance_Number, Balance_Error);
-  --     RAISE_APPLICATION_ERROR(Balance_Number, Balance_Error);
-  --     end if;
-  --   END Balance_Check; 
-  --   /
-
-    execute addCondo_Assign(666, 'R10');
-    execute addCondo_Assign(666, 'R12');
 
 
+  execute addCondo_Assign(666, 'R10');
+  execute addCondo_Assign(666, 'R12');
   execute addCondo_Assign(100, 'R14');
   execute addCondo_Assign(100, 'R17');
   execute addCondo_Assign(102, 'R17');
@@ -463,4 +413,6 @@
   select * from Condo_Assign;
   select * from Payment;
   select * from ReserveError;
+
+  ROLLBACK;
 
